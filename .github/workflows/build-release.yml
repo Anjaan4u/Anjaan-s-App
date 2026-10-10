@@ -23,6 +23,11 @@ jobs:
           sed -i 's/compileSdkVersion 36/compileSdkVersion 37/' app/build.gradle.kts
           grep -n "compileSdk" app/build.gradle.kts || true
 
+      - name: Fix package name
+        run: |
+          sed -i 's/applicationId = "com.music.bitchord"/applicationId = "com.anjaan.music"/' app/build.gradle.kts
+          grep -n "applicationId" app/build.gradle.kts | head -3
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
