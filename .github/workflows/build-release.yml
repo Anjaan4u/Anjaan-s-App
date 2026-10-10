@@ -23,9 +23,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-            - name: Setup Android SDK
-               run: |
-         export ANDROID_HOME=$HOME/android-sdk
+      - name: Setup Android SDK
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
           mkdir -p $ANDROID_HOME/cmdline-tools
           cd $ANDROID_HOME/cmdline-tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
