@@ -44,4 +44,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Anjaan-debug
-          path: app/build/outputs/apk/prod/debug/*.apk
+          path: app/build/outputs/apk/prod/debug/*arm64*.apk
