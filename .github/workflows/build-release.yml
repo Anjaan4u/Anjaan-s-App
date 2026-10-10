@@ -37,11 +37,16 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew :app:assembleProdDebug --stacktrace
+      - name: Generate keystore
+        run: |
+          keytool -genkey -v -keystore /tmp/anjaan.keystore -alias anjaan -keyalg RSA -keysize 2048 -validity 10000 -storepass anjaan123 -keypass anjaan123 -dname "CN=Anjaan, OU=App, O=Anjaan, L=City, S=State, C=IN"
+
+      - name: Build Release APK
+        run: |
+          ./gradlew :app:assembleProdRelease --stacktrace -Pandroid.injected.signing.store.file=/tmp/anjaan.keystore -Pandroid.injected.signing.store.password=anjaan123 -Pandroid.injected.signing.key.alias=anjaan -Pandroid.injected.signing.key.password=anjaan123
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Anjaan-debug
-          path: app/build/outputs/apk/prod/debug/*arm64*.apk
+          name: Anjaan-release
+          path: app/build/outputs/apk/prod/release/*arm64*.apk
