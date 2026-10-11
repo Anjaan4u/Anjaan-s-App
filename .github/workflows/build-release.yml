@@ -42,13 +42,13 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Generate keystore
+      - name: Restore keystore from secret
         run: |
-          keytool -genkey -v -keystore /tmp/anjaan.keystore -alias anjaan -keyalg RSA -keysize 2048 -validity 10000 -storepass anjaan123 -keypass anjaan123 -dname "CN=Anjaan, OU=App, O=Anjaan, L=City, S=State, C=IN"
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/anjaan.keystore
 
       - name: Build Release APK
         run: |
-          ./gradlew :app:assembleProdRelease --stacktrace -Pandroid.injected.signing.store.file=/tmp/anjaan.keystore -Pandroid.injected.signing.store.password=anjaan123 -Pandroid.injected.signing.key.alias=anjaan -Pandroid.injected.signing.key.password=anjaan123
+          ./gradlew :app:assembleProdRelease --stacktrace -Pandroid.injected.signing.store.file=/tmp/anjaan.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=anjaan -Pandroid.injected.signing.key.password=${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
